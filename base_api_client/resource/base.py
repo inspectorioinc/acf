@@ -1,3 +1,6 @@
+from base_api_client.error.base import UnknownActionError
+
+
 class BaseResource(object):
     """
     Base class for any resource provided by a service.
@@ -19,6 +22,6 @@ class BaseResource(object):
         action = self.ACTIONS.get(name)
 
         if action is None:
-            raise AttributeError('Unknown action')
+            raise UnknownActionError('Unknown action')
 
         return action()

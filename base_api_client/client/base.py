@@ -1,3 +1,6 @@
+from base_api_client.error.base import UnknownResourceError
+
+
 class BaseClient(object):
     """
     Base class for any service API client.
@@ -19,6 +22,6 @@ class BaseClient(object):
         resource = self.RESOURCES.get(name)
 
         if resource is None:
-            raise AttributeError('Unknown resource')
+            raise UnknownResourceError('Unknown resource')
 
         return resource()

@@ -1,6 +1,6 @@
 import requests
 
-from base_api_client.protocol.base import BaseProtocol
+from base_api_client.protocols.base import BaseProtocol
 
 
 class HttpProtocol(BaseProtocol):

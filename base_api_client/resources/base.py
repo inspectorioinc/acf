@@ -1,4 +1,4 @@
-from base_api_client.error.base import UnknownActionError
+from base_api_client.errors.base import UnknownActionError
 
 
 class BaseResource(object):

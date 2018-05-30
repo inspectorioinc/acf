@@ -1,5 +1,5 @@
-from base_api_client.protocol.base import BaseProtocol
-from base_api_client.wrapper.base import (
+from base_api_client.protocols.base import BaseProtocol
+from base_api_client.wrappers.base import (
     BaseParamsWrapper, BaseResultWrapper
 )
 

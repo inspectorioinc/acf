@@ -1,4 +1,4 @@
-from base_api_client.error.base import UnknownResourceError
+from base_api_client.errors.base import UnknownResourceError
 
 
 class BaseClient(object):

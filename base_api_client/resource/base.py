@@ -16,4 +16,9 @@ class BaseResource(object):
     ACTIONS = {}
 
     def __getattr__(self, name):
-        return self.ACTIONS.get(name)()
+        action = self.ACTIONS.get(name)
+
+        if action is None:
+            raise AttributeError('Unknown action')
+
+        return action()

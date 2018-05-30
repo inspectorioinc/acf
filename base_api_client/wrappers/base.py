@@ -31,6 +31,7 @@ class BaseWrapper(object):
     class Meta:
         container = None
 
+    @property
     def wrapped(self):
         raise NotImplementedError()
 

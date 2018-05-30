@@ -22,6 +22,8 @@ class BaseResource(object):
         action = self.ACTIONS.get(name)
 
         if action is None:
-            raise UnknownActionError('Unknown action')
+            raise UnknownActionError(
+                'Action `{name}` is not defined'.format(name=name)
+            )
 
         return action()

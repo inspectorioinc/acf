@@ -11,7 +11,7 @@ class BaseClient(object):
     Attributes
     ----------
     RESOURCES: dict of {str: obj}
-        Resources the client knowns how to interact with.
+        Resources the client knows how to interact with.
         Key: name of the resource.
         Value: specific resource class.
     """
@@ -22,6 +22,8 @@ class BaseClient(object):
         resource = self.RESOURCES.get(name)
 
         if resource is None:
-            raise UnknownResourceError('Unknown resource')
+            raise UnknownResourceError(
+                'Resource `{name}` is not defined'.format(name=name)
+            )
 
         return resource()

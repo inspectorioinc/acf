@@ -1,7 +1,7 @@
 import pytest
 
-from base_api_client.error.base import UnknownActionError
-from base_api_client.resource.base import BaseResource
+from base_api_client.errors.base import UnknownActionError
+from base_api_client.resources.base import BaseResource
 
 
 def test_base_resource_getattr():

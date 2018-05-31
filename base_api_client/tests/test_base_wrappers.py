@@ -1,6 +1,6 @@
 import pytest
 
-from base_api_client.wrapper.base import (
+from base_api_client.wrappers.base import (
     BaseParamsContainer, BaseParamsWrapper,
     BaseResultContainer, BaseResultWrapper,
     BaseWrapper

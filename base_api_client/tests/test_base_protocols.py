@@ -1,8 +1,8 @@
 import pytest
 import requests_mock
 
-from base_api_client.protocol.base import BaseProtocol
-from base_api_client.protocol.http import HttpProtocol
+from base_api_client.protocols.base import BaseProtocol
+from base_api_client.protocols.http import HttpProtocol
 
 
 def test_base_protocol_execute():

@@ -1,5 +1,6 @@
 cached-property==1.4.2
 coverage==4.5.1
+mock==2.0.0
 pytest==3.6.0
 pytest-cov==2.5.1
 requests==2.18.4

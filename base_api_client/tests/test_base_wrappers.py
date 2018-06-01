@@ -12,7 +12,7 @@ def test_base_wrapper():
         BaseWrapper().wrapped()
 
 
-def test_base_params_wrapper():
+def test_base_params_wrapper_init():
     args = (42,)
     kwargs = {'foo': 'bar'}
     wrapper = BaseParamsWrapper(*args, **kwargs)
@@ -21,7 +21,7 @@ def test_base_params_wrapper():
     assert wrapper.raw_kwargs == kwargs
 
 
-def test_base_result_wrapper():
+def test_base_result_wrapper_init():
     result = 'foobar'
     wrapper = BaseResultWrapper(result)
 
@@ -44,6 +44,9 @@ def test_base_params_container_init():
 def test_base_result_container_init():
     result = 'foobar'
     raw_result = 'foobar\n'
-    container = BaseResultContainer(parsed_result=result, raw_result=raw_result)
+    container = BaseResultContainer(
+        parsed_result=result,
+        raw_result=raw_result
+    )
 
     assert container.result == result and container.raw_result == raw_result

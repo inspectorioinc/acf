@@ -14,7 +14,7 @@ class HttpParamsWrapper(BaseParamsWrapper):
     @cached_property
     def wrapped(self):
         return self.Meta.container(
-            output_kwargs=self.build_kwargs()
+            prepared_kwargs=self.build_kwargs()
         )
 
     def build_kwargs(self):
@@ -34,7 +34,8 @@ class HttpResultWrapper(BaseResultWrapper):
     @cached_property
     def wrapped(self):
         return self.Meta.container(
-            result=self.parsed_result, raw_result=self.raw_result
+            parsed_result=self.parsed_result,
+            raw_result=self.raw_result
         )
 
     @cached_property

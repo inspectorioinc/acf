@@ -23,7 +23,7 @@ class BaseAction(object):
     RESULT_WRAPPER = BaseResultWrapper
 
     def __call__(self, *args, **kwargs):
-        wrapped_params = self.PARAMS_WRAPPER(args, kwargs).wrapped
+        wrapped_params = self.PARAMS_WRAPPER(*args, **kwargs).wrapped
         result = self.PROTOCOL().execute(
             *wrapped_params.args, **wrapped_params.kwargs
         )

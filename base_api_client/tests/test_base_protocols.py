@@ -17,6 +17,6 @@ def test_http_protocol_execute(requests_mocker):
     expected_response = 'some response'
 
     requests_mocker.request(method, url, text=expected_response)
-    response = HttpProtocol().execute(method, url)
+    response = HttpProtocol().execute(method=method, url=url)
 
     assert response.text == expected_response

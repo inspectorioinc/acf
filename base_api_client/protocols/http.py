@@ -12,8 +12,8 @@ class HttpProtocol(BaseProtocol):
         except Exception as error:
             return self._handle_error(error, *args, **kwargs)
 
-    def _perform_request(self, method, url, *args, **kwargs):
-        return requests.request(method, url, **kwargs)
+    def _perform_request(self, *args, **kwargs):
+        return requests.request(**kwargs)
 
     def _handle_error(self, error, *args, **kwargs):
         raise RequestError(

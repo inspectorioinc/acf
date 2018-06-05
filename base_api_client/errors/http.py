@@ -1,8 +1,20 @@
 from base_api_client.errors.base import BaseError
 
 
-class RequestError(BaseError):
+class BaseHttpError(BaseError):
 
     def __init__(self, message, base_error, *args, **kwargs):
-        super(RequestError, self).__init__(message, *args, **kwargs)
+        super(BaseHttpError, self).__init__(message, *args, **kwargs)
         self.base_error = base_error
+
+
+class ParamsError(BaseHttpError):
+    pass
+
+
+class RequestError(BaseHttpError):
+    pass
+
+
+class ResultError(BaseHttpError):
+    pass

@@ -22,6 +22,9 @@ class BaseAction(object):
     PARAMS_WRAPPER = BaseParamsWrapper
     RESULT_WRAPPER = BaseResultWrapper
 
+    def __init__(self, config=None):
+        self.config = config or {}
+
     def __call__(self, *args, **kwargs):
         wrapped_params = self.PARAMS_WRAPPER(
             self.config, *args, **kwargs
@@ -32,6 +35,3 @@ class BaseAction(object):
         return self.RESULT_WRAPPER(
             result, config=self.config
         ).wrapped
-
-    def __init__(self, config=None):
-        self.config = config or {}

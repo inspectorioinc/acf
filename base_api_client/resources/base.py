@@ -22,6 +22,9 @@ class BaseResource(object):
 
     ACTIONS = {}
 
+    def __init__(self, config=None):
+        self.config = config or {}
+
     @cached_property
     def action_names(self):
         return self.ACTIONS.keys()
@@ -38,6 +41,3 @@ class BaseResource(object):
 
     def __dir__(self):
         return dir(type(self)) + self.action_names
-
-    def __init__(self, config=None):
-        self.config = config or {}

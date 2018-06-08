@@ -22,6 +22,9 @@ class BaseClient(object):
 
     RESOURCES = {}
 
+    def __init__(self, config=None):
+        self.config = config or {}
+
     @cached_property
     def resource_names(self):
         return self.RESOURCES.keys()
@@ -38,6 +41,3 @@ class BaseClient(object):
 
     def __dir__(self):
         return dir(type(self)) + self.resource_names
-
-    def __init__(self, config=None):
-        self.config = config or {}

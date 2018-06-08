@@ -31,12 +31,12 @@ class BaseWrapper(object):
     class Meta:
         container = None
 
+    def __init__(self, config=None):
+        self.config = config or {}
+
     @property
     def wrapped(self):
         raise NotImplementedError()
-
-    def __init__(self, config=None):
-        self.config = config or {}
 
 
 class BaseParamsWrapper(BaseWrapper):

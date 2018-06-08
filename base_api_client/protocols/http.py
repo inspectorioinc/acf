@@ -6,16 +6,16 @@ from base_api_client.errors.http import RequestError
 
 class HttpProtocol(BaseProtocol):
 
-    def execute(self, *args, **kwargs):
+    def execute(self, **kwargs):
         try:
-            return self._perform_request(*args, **kwargs)
+            return self._perform_request(**kwargs)
         except Exception as error:
-            return self._handle_error(error, *args, **kwargs)
+            return self._handle_error(error, **kwargs)
 
-    def _perform_request(self, *args, **kwargs):
+    def _perform_request(self, **kwargs):
         return requests.request(**kwargs)
 
-    def _handle_error(self, error, *args, **kwargs):
+    def _handle_error(self, error, **kwargs):
         raise RequestError(
             message=getattr(error, 'message'),
             base_error=error

@@ -25,13 +25,11 @@ class BaseAction(object):
     def __init__(self, config=None):
         self.config = config or {}
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, **kwargs):
         wrapped_params = self.PARAMS_WRAPPER(
-            self.config, *args, **kwargs
+            config=self.config, **kwargs
         ).wrapped
-        result = self.PROTOCOL().execute(
-            *wrapped_params.args, **wrapped_params.kwargs
-        )
+        result = self.PROTOCOL().execute(**wrapped_params.kwargs)
         return self.RESULT_WRAPPER(
-            result, config=self.config
+            config=self.config, raw_result=result
         ).wrapped

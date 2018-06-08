@@ -9,8 +9,7 @@ class BaseContainer(object):
 
 class BaseParamsContainer(BaseContainer):
 
-    def __init__(self, prepared_args=None, prepared_kwargs=None):
-        self.args = prepared_args or tuple()
+    def __init__(self, prepared_kwargs=None):
         self.kwargs = prepared_kwargs or dict()
 
 
@@ -44,9 +43,8 @@ class BaseParamsWrapper(BaseWrapper):
     class Meta:
         container = BaseParamsContainer
 
-    def __init__(self, config=None, *args, **kwargs):
+    def __init__(self, config=None, **kwargs):
         super(BaseParamsWrapper, self).__init__(config=config)
-        self.raw_args = args
         self.raw_kwargs = kwargs
 
 

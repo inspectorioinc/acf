@@ -15,7 +15,7 @@ def test_base_wrapper():
 def test_base_params_wrapper_init():
     args = (42,)
     kwargs = {'foo': 'bar'}
-    wrapper = BaseParamsWrapper(*args, **kwargs)
+    wrapper = BaseParamsWrapper({}, *args, **kwargs)
 
     assert wrapper.raw_args == args
     assert wrapper.raw_kwargs == kwargs
@@ -23,7 +23,7 @@ def test_base_params_wrapper_init():
 
 def test_base_result_wrapper_init():
     result = 'foobar'
-    wrapper = BaseResultWrapper(result)
+    wrapper = BaseResultWrapper(result, config={})
 
     assert wrapper.raw_result == result
 

@@ -2,16 +2,21 @@ import pytest
 
 from base_api_client.errors.base import UnknownActionError
 from base_api_client.resources.base import BaseResource
+from base_api_client.actions.base import BaseAction
+
+
+class Action(BaseAction):
+    pass
 
 
 class Resource(BaseResource):
-    ACTIONS = {'get': list}
+    ACTIONS = {'get': BaseAction}
 
 
 def test_base_resource_getattr():
     resource = Resource()
 
-    assert isinstance(resource.get, list)
+    assert isinstance(resource.get, BaseAction)
 
     with pytest.raises(UnknownActionError):
         resource.unknown_action

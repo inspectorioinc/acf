@@ -20,6 +20,11 @@ class HttpParamsWrapper(BaseParamsWrapper):
             return self.Meta.container(
                 prepared_kwargs=self.build_kwargs()
             )
+        except KeyError as error_key:
+            raise ParamsError(
+                message='Parameter `{}` is required.'.format(error_key),
+                base_error=error_key
+            )
         except Exception as error:
             raise ParamsError(
                 message=getattr(error, 'message'),

@@ -35,13 +35,17 @@ class BaseWrapper(object):
     def wrapped(self):
         raise NotImplementedError()
 
+    def __init__(self, config=None):
+        self.config = config or {}
+
 
 class BaseParamsWrapper(BaseWrapper):
 
     class Meta:
         container = BaseParamsContainer
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, config=None, *args, **kwargs):
+        super(BaseParamsWrapper, self).__init__(config=config)
         self.raw_args = args
         self.raw_kwargs = kwargs
 
@@ -51,5 +55,6 @@ class BaseResultWrapper(BaseWrapper):
     class Meta:
         container = BaseResultContainer
 
-    def __init__(self, raw_result):
+    def __init__(self, raw_result, config=None):
+        super(BaseResultWrapper, self).__init__(config=config)
         self.raw_result = raw_result

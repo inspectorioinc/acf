@@ -34,7 +34,10 @@ class BaseClient(object):
                 'Resource `{name}` is not defined'.format(name=name)
             )
 
-        return resource()
+        return resource(config=self.config)
 
     def __dir__(self):
         return dir(type(self)) + self.resource_names
+
+    def __init__(self, config=None):
+        self.config = config or {}

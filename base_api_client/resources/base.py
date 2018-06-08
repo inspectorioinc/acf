@@ -34,7 +34,10 @@ class BaseResource(object):
                 'Action `{name}` is not defined'.format(name=name)
             )
 
-        return action()
+        return action(config=self.config)
 
     def __dir__(self):
         return dir(type(self)) + self.action_names
+
+    def __init__(self, config=None):
+        self.config = config or {}

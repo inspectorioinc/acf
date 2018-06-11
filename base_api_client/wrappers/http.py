@@ -11,7 +11,7 @@ class HttpParamsWrapper(BaseParamsWrapper):
     REQUEST_KWARGS = [
         'method', 'url', 'params',
         'data', 'headers', 'cookies',
-        'auth', 'timeout', 'json'
+        'files', 'auth', 'timeout', 'json'
     ]
 
     @cached_property

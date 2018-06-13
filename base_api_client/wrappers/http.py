@@ -6,14 +6,23 @@ from base_api_client.wrappers.base import (
 from base_api_client.errors.http import ParamsError, ResultError
 
 
+def initialize_url_template(cls):
+    if hasattr(cls, 'URL_COMPONENTS'):
+        cls.URL_TEMPLATE = '/'.join(cls.URL_COMPONENTS)
+    return cls
+
+
 class HttpParamsWrapper(BaseParamsWrapper):
 
-    METHOD = None
     REQUEST_KWARGS = [
         'method', 'url', 'params',
         'data', 'headers', 'cookies',
         'files', 'auth', 'timeout', 'json'
     ]
+
+    METHOD = None
+    URL_COMPONENTS = None
+    URL_TEMPLATE = None
 
     @cached_property
     def wrapped(self):
@@ -42,6 +51,9 @@ class HttpParamsWrapper(BaseParamsWrapper):
 
     def build_method(self):
         return self.METHOD
+
+    def build_url(self):
+        return self.URL_TEMPLATE.format(**self.raw_kwargs)
 
     def build_empty(self):
         pass

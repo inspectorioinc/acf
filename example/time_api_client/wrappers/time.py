@@ -1,18 +1,18 @@
 import json
 
-from base_api_client.wrappers.http import HttpParamsWrapper, HttpResultWrapper
+from base_api_client.wrappers.http import (
+    HttpParamsWrapper, HttpResultWrapper, initialize_url_template
+)
 
 
+@initialize_url_template
 class TimeParamsWrapper(HttpParamsWrapper):
 
     METHOD = 'GET'
-    URL_TEMPLATE = 'http://worldclockapi.com/api/json/{timezone}/now'
-    DEFAULT_TIMEZONE = 'utc'
-
-    def build_url(self):
-        return self.URL_TEMPLATE.format(
-            timezone=self.raw_kwargs.get('timezone', self.DEFAULT_TIMEZONE)
-        )
+    URL_COMPONENTS = [
+        'http://worldclockapi.com/api',
+        'json/{timezone}/now'
+    ]
 
 
 class TimeResultWrapper(HttpResultWrapper):

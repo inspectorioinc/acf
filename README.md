@@ -10,7 +10,7 @@ A framework containing template functionality that can be used while implementin
 >>> time_api_client = TimeClient(
         config={'username': 'test', 'password': 'test'}
     )
->>> wrapped_result = time_api_client.time.get_now()
+>>> wrapped_result = time_api_client.time.get_now(timezone='utc')
 >>> current_time = wrapped_result.result
 
 >>> print(current_time)

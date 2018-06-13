@@ -14,9 +14,6 @@ class TimeParamsWrapper(HttpParamsWrapper):
             timezone=self.raw_kwargs.get('timezone', self.DEFAULT_TIMEZONE)
         )
 
-    def build_method(self):
-        return self.METHOD
-
 
 class TimeResultWrapper(HttpResultWrapper):
 

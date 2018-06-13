@@ -8,6 +8,7 @@ from base_api_client.errors.http import ParamsError, ResultError
 
 class HttpParamsWrapper(BaseParamsWrapper):
 
+    METHOD = None
     REQUEST_KWARGS = [
         'method', 'url', 'params',
         'data', 'headers', 'cookies',
@@ -38,6 +39,9 @@ class HttpParamsWrapper(BaseParamsWrapper):
             )()
             for kwarg in self.REQUEST_KWARGS
         }
+
+    def build_method(self):
+        return self.METHOD
 
     def build_empty(self):
         pass

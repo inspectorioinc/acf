@@ -73,7 +73,7 @@ class HttpResultWrapper(BaseResultWrapper):
 
     @property
     def is_successful(self):
-        return True
+        return 200 <= self.raw_result.status_code < 300
 
     @property
     def parsed_result(self):

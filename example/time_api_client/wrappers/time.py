@@ -17,5 +17,5 @@ class TimeParamsWrapper(HttpParamsWrapper):
 class TimeResultWrapper(HttpResultWrapper):
 
     @property
-    def _parsed_result(self):
+    def parsed_result(self):
         return json.loads(self.raw_result.content)['currentDateTime']

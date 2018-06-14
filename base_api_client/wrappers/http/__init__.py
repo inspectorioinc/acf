@@ -61,8 +61,8 @@ class HttpResultWrapper(BaseResultWrapper):
     def wrapped(self):
         try:
             return self.Meta.container(
-                is_successful=self._is_successful,
-                parsed_result=self._parsed_result,
+                is_successful=self.is_successful,
+                parsed_result=self.parsed_result,
                 raw_result=self.raw_result
             )
         except Exception as error:
@@ -72,9 +72,9 @@ class HttpResultWrapper(BaseResultWrapper):
             )
 
     @property
-    def _is_successful(self):
+    def is_successful(self):
         return True
 
     @property
-    def _parsed_result(self):
+    def parsed_result(self):
         raise NotImplementedError()

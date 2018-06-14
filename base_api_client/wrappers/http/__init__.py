@@ -1,15 +1,8 @@
 from cached_property import cached_property
 
-from base_api_client.wrappers.base import (
-    BaseParamsWrapper, BaseResultContainer, BaseResultWrapper
-)
+from base_api_client.wrappers.base import BaseParamsWrapper, BaseResultWrapper
+from base_api_client.wrappers.http.containers import HttpResultContainer
 from base_api_client.errors.http import ParamsError, ResultError
-
-
-def initialize_url_template(cls):
-    if hasattr(cls, 'URL_COMPONENTS'):
-        cls.URL_TEMPLATE = '/'.join(cls.URL_COMPONENTS)
-    return cls
 
 
 class HttpParamsWrapper(BaseParamsWrapper):
@@ -57,17 +50,6 @@ class HttpParamsWrapper(BaseParamsWrapper):
 
     def build_empty(self):
         pass
-
-
-class HttpResultContainer(BaseResultContainer):
-
-    def __init__(
-        self, is_successful=True, parsed_result=None, raw_result=None
-    ):
-        super(HttpResultContainer, self).__init__(
-            parsed_result=parsed_result, raw_result=raw_result
-        )
-        self.is_successful = is_successful
 
 
 class HttpResultWrapper(BaseResultWrapper):

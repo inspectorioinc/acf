@@ -1,8 +1,7 @@
 import json
 
-from base_api_client.wrappers.http import (
-    HttpParamsWrapper, HttpResultWrapper, initialize_url_template
-)
+from base_api_client.wrappers.http import HttpParamsWrapper, HttpResultWrapper
+from base_api_client.wrappers.http.decorators import initialize_url_template
 
 
 @initialize_url_template

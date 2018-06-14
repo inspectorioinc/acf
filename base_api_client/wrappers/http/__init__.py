@@ -1,10 +1,44 @@
 from cached_property import cached_property
+from six import add_metaclass
 
 from base_api_client.wrappers.base import BaseParamsWrapper, BaseResultWrapper
 from base_api_client.wrappers.http.containers import HttpResultContainer
 from base_api_client.errors.http import ParamsError, ResultError
 
+__all__ = ['HttpParamsWrapper', 'HttpResultWrapper']
 
+
+class HttpParamsWrapperMetaclass(type):
+    """
+    Metaclass that updates URL_TEMPLATE constant
+    of the HttpParamsWrapper child class
+    using predefined URL_COMPONENTS iterable if it's available
+    """
+
+    def __new__(mcs, name, bases, class_dict):
+        url_components = class_dict.get('URL_COMPONENTS')
+
+        if url_components:
+            if 'URL_TEMPLATE' in class_dict:
+                url_template = class_dict['URL_TEMPLATE']
+            else:
+                url_template = None
+                for base_class in bases:
+                    if hasattr(base_class, 'URL_TEMPLATE'):
+                        url_template = base_class.URL_TEMPLATE
+                        break
+
+            if url_template:
+                url_components = [url_template] + list(url_components)
+
+            class_dict['URL_TEMPLATE'] = '/'.join(url_components)
+
+        return super(HttpParamsWrapperMetaclass, mcs).__new__(
+            mcs, name, bases, class_dict
+        )
+
+
+@add_metaclass(HttpParamsWrapperMetaclass)
 class HttpParamsWrapper(BaseParamsWrapper):
 
     REQUEST_KWARGS = [

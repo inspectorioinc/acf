@@ -7,8 +7,8 @@ setup(
     version='1.0.0',
     description='Base API Client',
     install_requires=[
-        'cached-property==1.4.2',
-        'requests==2.18.4',
+        'cached-property>=1.4,<2',
+        'requests>=2.18,<3',
     ],
     packages=find_packages(
         exclude=['tests', '*.tests', '*.tests.*', 'tests.*', ]

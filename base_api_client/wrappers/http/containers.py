@@ -10,3 +10,7 @@ class HttpResultContainer(BaseResultContainer):
             parsed_result=parsed_result, raw_result=raw_result
         )
         self.is_successful = is_successful
+
+    @property
+    def response(self):
+        return self.raw_result

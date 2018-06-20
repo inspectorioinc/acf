@@ -1,5 +1,3 @@
-import json
-
 from base_api_client.wrappers.http import HttpParamsWrapper, HttpResultWrapper
 
 
@@ -16,4 +14,4 @@ class TimeResultWrapper(HttpResultWrapper):
 
     @property
     def parsed_result(self):
-        return json.loads(self.raw_result.content)['currentDateTime']
+        return self.response.json()['currentDateTime']

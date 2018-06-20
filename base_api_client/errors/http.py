@@ -17,4 +17,10 @@ class RequestError(BaseHttpError):
 
 
 class ResultError(BaseHttpError):
+    def __init__(self, message, base_error, response, *args, **kwargs):
+        super(ResultError, self).__init__(message, base_error, *args, **kwargs)
+        self.response = response
+
+
+class ParseResponseError(ResultError):
     pass

@@ -3,7 +3,11 @@ from six import add_metaclass
 
 from base_api_client.wrappers.base import BaseParamsWrapper, BaseResultWrapper
 from base_api_client.wrappers.http.containers import HttpResultContainer
-from base_api_client.errors.http import ParamsError, ResultError
+from base_api_client.errors.http import (
+    ParamsError,
+    ParseResponseError,
+    ResultError
+)
 
 __all__ = ['HttpParamsWrapper', 'HttpResultWrapper']
 
@@ -64,7 +68,7 @@ class HttpParamsWrapper(BaseParamsWrapper):
             )
         except Exception as error:
             raise ParamsError(
-                message=getattr(error, 'message'),
+                message=getattr(error, 'message', None) or str(error),
                 base_error=error
             )
 
@@ -94,15 +98,32 @@ class HttpResultWrapper(BaseResultWrapper):
     @cached_property
     def wrapped(self):
         try:
+            try:
+                is_successful = self.is_successful
+                parsed_result = self.parsed_result
+            except ValueError as error:
+                if self.response_status_is_successful:
+                    raise ParseResponseError(
+                        'Can not parse content of the API response',
+                        base_error=error,
+                        response=self.response
+                    )
+                else:
+                    is_successful = False
+                    parsed_result = None
+
             return self.Meta.container(
-                is_successful=self.is_successful,
-                parsed_result=self.parsed_result,
+                is_successful=is_successful,
+                parsed_result=parsed_result,
                 raw_result=self.raw_result
             )
+        except ParseResponseError as error:
+            raise error
         except Exception as error:
             raise ResultError(
-                message=getattr(error, 'message'),
-                base_error=error
+                message=getattr(error, 'message', None) or str(error),
+                base_error=error,
+                response=self.response
             )
 
     @property
@@ -110,8 +131,10 @@ class HttpResultWrapper(BaseResultWrapper):
         return self.raw_result
 
     @property
-    def is_successful(self):
+    def response_status_is_successful(self):
         return 200 <= self.response.status_code < 300
+
+    is_successful = response_status_is_successful
 
     @property
     def parsed_result(self):

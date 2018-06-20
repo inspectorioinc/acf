@@ -17,6 +17,6 @@ class HttpProtocol(BaseProtocol):
 
     def _handle_error(self, error, **kwargs):
         raise RequestError(
-            message=getattr(error, 'message'),
+            message=getattr(error, 'message', None) or str(error),
             base_error=error
         )

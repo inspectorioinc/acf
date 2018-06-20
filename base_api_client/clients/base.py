@@ -40,4 +40,4 @@ class BaseClient(object):
         return resource(config=self.config)
 
     def __dir__(self):
-        return dir(type(self)) + self.resource_names
+        return dir(type(self)) + list(self.resource_names)

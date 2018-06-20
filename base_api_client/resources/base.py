@@ -40,4 +40,4 @@ class BaseResource(object):
         return action(config=self.config)
 
     def __dir__(self):
-        return dir(type(self)) + self.action_names
+        return dir(type(self)) + list(self.action_names)

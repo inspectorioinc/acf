@@ -1,6 +1,5 @@
 import mock
 import pytest
-import requests_mock
 
 from base_api_client.errors.http import RequestError
 from base_api_client.protocols.base import BaseProtocol
@@ -12,13 +11,12 @@ def test_base_protocol_execute():
         BaseProtocol().execute()
 
 
-@requests_mock.mock()
-def test_http_protocol_execute(requests_mocker):
+def test_http_protocol_execute(requests_mock):
     url = 'http://test.com'
     method = 'get'
     expected_response = 'some response'
 
-    requests_mocker.request(method, url, text=expected_response)
+    requests_mock.request(method, url, text=expected_response)
     response = HttpProtocol().execute(method=method, url=url)
 
     assert response.text == expected_response

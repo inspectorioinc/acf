@@ -22,7 +22,11 @@ class BaseClient(object):
 
     RESOURCES = {}
 
-    def __init__(self, config=None):
+    def __init__(self, config=None, **kwargs):
+        if config is None:
+            config = kwargs
+        else:
+            config.update(kwargs)
         self.config = config or {}
 
     @cached_property

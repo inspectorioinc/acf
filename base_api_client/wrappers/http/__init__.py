@@ -138,4 +138,5 @@ class HttpResultWrapper(BaseResultWrapper):
 
     @property
     def parsed_result(self):
-        raise NotImplementedError()
+        if self.response.status_code != 204:
+            return self.response.json()

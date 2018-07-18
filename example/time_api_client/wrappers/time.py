@@ -14,4 +14,4 @@ class TimeResultWrapper(HttpResultWrapper):
 
     @property
     def parsed_result(self):
-        return self.response.json()['currentDateTime']
+        return super(TimeResultWrapper, self).parsed_result['currentDateTime']

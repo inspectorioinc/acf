@@ -1,6 +1,6 @@
 from cached_property import cached_property
 
-from base_api_client.errors.base import UnknownResourceError
+from base_api_client.errors import UnknownResourceError
 
 
 class BaseClient(object):

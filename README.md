@@ -1,18 +1,55 @@
 # Inspectorio base API client
 
-A framework containing template functionality that can be used while implementing specific API client libraries for the Inspectorio services.
+A framework containing template functionality that can be used while
+implementing specific API client libraries for any services.
+
+## Minimal client
+Minimal API client could looks like this:
+```python
+from base_api_client.actions.http import HttpAction
+from base_api_client.clients.base import BaseClient
+from base_api_client.resources.base import BaseResource
+
+
+class SendAnythingAction(HttpAction):
+
+    METHOD = 'POST'
+    URL_PATH_TEMPLATE = 'https://httpbin.org/anything'
+    RESULT_KEY = 'json'
+
+
+class AnythingResource(BaseResource):
+
+    ACTIONS = {
+        'send': SendAnythingAction
+    }
+
+
+class HttpbinClient(BaseClient):
+
+    RESOURCES = {
+        'anything': AnythingResource
+    }
+```
 
 ## Example of the API client usage
+You could evaluate the code above or just execute
+```python
+from example.httpbin_client import HttpbinClient
+```
+to get the Httpbin client.
+After that you'll be able to try
+[sending anything](http://httpbin.org/#/Anything/post_anything)!
 
 ```python
->>> from example.time_api_client.clients.time import TimeClient
+>>> client = HttpbinClient()
+>>> api_result = client.anything.send(foo='bar')
+>>> api_result.is_successful
+True
 
->>> time_api_client = TimeClient(
-        config={'username': 'test', 'password': 'test'}
-    )
->>> wrapped_result = time_api_client.time.get_now(timezone='utc')
->>> current_time = wrapped_result.result
+>>> api_result.response
+<Response [200]>
 
->>> print(current_time)
-2018-06-07T13:25Z
+>>> api_result.result
+{'foo': 'bar'}
 ```

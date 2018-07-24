@@ -1,19 +1,4 @@
-#
-# Container classes
-#
-
-
-class BaseContainer(object):
-    pass
-
-
-class BaseParamsContainer(BaseContainer):
-
-    def __init__(self, prepared_kwargs=None):
-        self.kwargs = prepared_kwargs or dict()
-
-
-class BaseResultContainer(BaseContainer):
+class BaseResultContainer(object):
 
     def __init__(self, parsed_result=None, raw_result=None):
         self.result = parsed_result
@@ -24,13 +9,11 @@ class BaseResultContainer(BaseContainer):
 # Wrapper classes
 #
 
-
 class BaseWrapper(object):
 
-    class Meta:
-        container = None
+    def __init__(self, action, config=None):
 
-    def __init__(self, config=None):
+        self.action = action
         self.config = config or {}
 
     @property
@@ -40,12 +23,9 @@ class BaseWrapper(object):
 
 class BaseParamsWrapper(BaseWrapper):
 
-    class Meta:
-        container = BaseParamsContainer
-
-    def __init__(self, config=None, **kwargs):
-        super(BaseParamsWrapper, self).__init__(config=config)
-        self.raw_kwargs = kwargs
+    def __init__(self, action, raw_kwargs, config=None):
+        super(BaseParamsWrapper, self).__init__(action=action, config=config)
+        self.raw_kwargs = raw_kwargs
 
 
 class BaseResultWrapper(BaseWrapper):
@@ -53,6 +33,6 @@ class BaseResultWrapper(BaseWrapper):
     class Meta:
         container = BaseResultContainer
 
-    def __init__(self, raw_result, config=None):
-        super(BaseResultWrapper, self).__init__(config=config)
+    def __init__(self, action, raw_result, config=None):
+        super(BaseResultWrapper, self).__init__(action=action, config=config)
         self.raw_result = raw_result

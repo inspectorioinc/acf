@@ -2,7 +2,7 @@ import pytest
 from faker import Faker
 
 from base_api_client.clients.base import BaseClient
-from base_api_client.errors.base import UnknownResourceError
+from base_api_client.errors import UnknownResourceError
 from base_api_client.resources.base import BaseResource
 
 
@@ -24,9 +24,9 @@ def test_base_client_init():
     assert client.config == config
 
     kwargs = faker.pydict()
+    expected_config = dict(config, **kwargs)
     client = Client(config, **kwargs)
-    config.update(**kwargs)
-    assert client.config == config
+    assert client.config == expected_config
 
     client = Client(**kwargs)
     assert client.config == kwargs

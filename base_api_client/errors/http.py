@@ -1,4 +1,4 @@
-from base_api_client.errors.base import BaseError
+from base_api_client.errors import BaseError
 
 
 class BaseHttpError(BaseError):

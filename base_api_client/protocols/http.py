@@ -1,7 +1,7 @@
 import requests
 
-from base_api_client.protocols.base import BaseProtocol
 from base_api_client.errors.http import RequestError
+from base_api_client.protocols.base import BaseProtocol
 
 
 class HttpProtocol(BaseProtocol):

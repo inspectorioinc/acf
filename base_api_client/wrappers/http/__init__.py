@@ -1,48 +1,17 @@
 from cached_property import cached_property
-from six import add_metaclass
 
-from base_api_client.wrappers.base import BaseParamsWrapper, BaseResultWrapper
-from base_api_client.wrappers.http.containers import HttpResultContainer
+from base_api_client.constants import defined, NOT_SET
 from base_api_client.errors.http import (
     ParamsError,
     ParseResponseError,
     ResultError
 )
+from base_api_client.wrappers.base import BaseParamsWrapper, BaseResultWrapper
+from base_api_client.wrappers.http.containers import HttpResultContainer
 
 __all__ = ['HttpParamsWrapper', 'HttpResultWrapper']
 
 
-class HttpParamsWrapperMetaclass(type):
-    """
-    Metaclass that updates URL_TEMPLATE constant
-    of the HttpParamsWrapper child class
-    using predefined URL_COMPONENTS iterable if it's available
-    """
-
-    def __new__(mcs, name, bases, class_dict):
-        url_components = class_dict.get('URL_COMPONENTS')
-
-        if url_components:
-            if 'URL_TEMPLATE' in class_dict:
-                url_template = class_dict['URL_TEMPLATE']
-            else:
-                url_template = None
-                for base_class in bases:
-                    if hasattr(base_class, 'URL_TEMPLATE'):
-                        url_template = base_class.URL_TEMPLATE
-                        break
-
-            if url_template:
-                url_components = [url_template] + list(url_components)
-
-            class_dict['URL_TEMPLATE'] = '/'.join(url_components)
-
-        return super(HttpParamsWrapperMetaclass, mcs).__new__(
-            mcs, name, bases, class_dict
-        )
-
-
-@add_metaclass(HttpParamsWrapperMetaclass)
 class HttpParamsWrapper(BaseParamsWrapper):
 
     REQUEST_KWARGS = [
@@ -51,21 +20,12 @@ class HttpParamsWrapper(BaseParamsWrapper):
         'files', 'auth', 'timeout', 'json'
     ]
 
-    METHOD = None
-    URL_COMPONENTS = None
-    URL_TEMPLATE = None
-
     @cached_property
     def wrapped(self):
         try:
-            return self.Meta.container(
-                prepared_kwargs=self.build_kwargs()
-            )
-        except KeyError as error_key:
-            raise ParamsError(
-                message='Parameter `{}` is required.'.format(error_key),
-                base_error=error_key
-            )
+            return self.build_kwargs()
+        except ParamsError as error:
+            raise error
         except Exception as error:
             raise ParamsError(
                 message=getattr(error, 'message', None) or str(error),
@@ -73,18 +33,81 @@ class HttpParamsWrapper(BaseParamsWrapper):
             )
 
     def build_kwargs(self):
+        default = self.build_empty
         return {
             kwarg: getattr(
-                self, 'build_{kwarg}'.format(kwarg=kwarg), self.build_empty
+                self, 'build_{kwarg}'.format(kwarg=kwarg), default
             )()
             for kwarg in self.REQUEST_KWARGS
         }
 
+    def get_data_from_raw_kwargs(self, include=NOT_SET, exclude=NOT_SET):
+        if defined(include):
+            return {
+                key: value
+                for key, value in self.raw_kwargs.items()
+                if key in include
+            }
+
+        if exclude:
+            exclude.update(self.action.DEFINED_PARAMS or ())
+        else:
+            exclude = self.action.DEFINED_PARAMS
+
+        if defined(exclude):
+            return {
+                key: value
+                for key, value in self.raw_kwargs.items()
+                if key not in exclude
+            }
+
+        return self.raw_kwargs
+
     def build_method(self):
-        return self.METHOD
+        return self.action.METHOD
 
     def build_url(self):
-        return self.URL_TEMPLATE.format(**self.raw_kwargs)
+        try:
+            return self.action.URL_PATH_TEMPLATE.format(**self.raw_kwargs)
+        except KeyError as error_key:
+            raise ParamsError(
+                message='Parameter {} is required'.format(error_key),
+                base_error=error_key
+            )
+
+    def build_params(self):
+        """Returns query string params"""
+
+        url_query_params = self.action.URL_QUERY_PARAMS
+        if defined(url_query_params):
+            return self.get_data_from_raw_kwargs(include=url_query_params)
+
+        if (not self.action.PAYLOAD_REQUIRED or
+                defined(self.action.PAYLOAD_PARAMS)):
+            return self.get_data_from_raw_kwargs()
+
+        if 'data' in self.raw_kwargs:
+            return self.get_data_from_raw_kwargs(exclude={'data'})
+
+    def build_json(self):
+        """Returns the payload if it's required"""
+
+        if self.action.PAYLOAD_REQUIRED:
+            if 'data' in self.raw_kwargs:
+                return self.raw_kwargs['data']
+            return self.get_data_from_raw_kwargs(
+                include=self.action.PAYLOAD_PARAMS
+            )
+
+    def build_headers(self):
+        """
+        Returns headers if HEADERS_PARAMS constant
+        is defined for the action
+        """
+
+        headers_params = self.action.HEADERS_PARAMS
+        if defined(headers_params):
+            return self.get_data_from_raw_kwargs(include=headers_params)
 
     def build_empty(self):
         pass
@@ -139,4 +162,8 @@ class HttpResultWrapper(BaseResultWrapper):
     @property
     def parsed_result(self):
         if self.response.status_code != 204:
-            return self.response.json()
+            result = self.response.json()
+            result_key = getattr(self.action, 'RESULT_KEY', None)
+            if result_key is not None:
+                return result.get(result_key)
+            return result

@@ -1,41 +1,36 @@
 import pytest
 
 from base_api_client.wrappers.base import (
-    BaseParamsContainer, BaseParamsWrapper,
-    BaseResultContainer, BaseResultWrapper,
-    BaseWrapper
+    BaseParamsWrapper,
+    BaseResultContainer,
+    BaseResultWrapper,
+    BaseWrapper,
 )
 
 
 def test_base_wrapper():
     with pytest.raises(NotImplementedError):
-        BaseWrapper().wrapped()
+        BaseWrapper(action=None).wrapped
 
 
 def test_base_params_wrapper_init():
+    action = object()
     kwargs = {'foo': 'bar'}
-    wrapper = BaseParamsWrapper(config={}, **kwargs)
+    wrapper = BaseParamsWrapper(
+        action=action, raw_kwargs=kwargs, config={}
+    )
 
+    assert wrapper.action is action
     assert wrapper.raw_kwargs == kwargs
 
 
 def test_base_result_wrapper_init():
+    action = object()
     result = 'foobar'
-    wrapper = BaseResultWrapper(config={}, raw_result=result)
+    wrapper = BaseResultWrapper(action=action, raw_result=result, config={})
 
+    assert wrapper.action is action
     assert wrapper.raw_result == result
-
-
-def test_base_params_container_init():
-    kwargs = {'foo': 'bar'}
-    container = BaseParamsContainer(prepared_kwargs=kwargs)
-
-    assert container.kwargs == kwargs
-
-    # test empty output arguments
-    container = BaseParamsContainer()
-
-    assert container.kwargs == dict()
 
 
 def test_base_result_container_init():

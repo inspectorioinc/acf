@@ -1,6 +1,6 @@
 from cached_property import cached_property
 
-from base_api_client.constants import defined, NOT_SET
+from base_api_client.constants import defined, UNDEFINED
 from base_api_client.errors.http import (
     ParamsError,
     ParseResponseError,
@@ -41,7 +41,7 @@ class HttpParamsWrapper(BaseParamsWrapper):
             for kwarg in self.REQUEST_KWARGS
         }
 
-    def get_data_from_raw_kwargs(self, include=NOT_SET, exclude=NOT_SET):
+    def get_data_from_raw_kwargs(self, include=UNDEFINED, exclude=UNDEFINED):
         if defined(include):
             return {
                 key: value

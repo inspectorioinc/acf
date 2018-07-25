@@ -1,16 +1,16 @@
 import pytest
 
-from base_api_client.constants import NOT_SET, defined
+from base_api_client.constants import UNDEFINED, defined
 
 
 class TestConstants(object):
 
     def test_not_set(self):
-        assert bool(NOT_SET) is False
-        assert str(NOT_SET) == 'NotSet'
+        assert bool(UNDEFINED) is False
+        assert str(UNDEFINED) == 'Undefined'
 
     def test_not_defined(self):
-        assert not defined(NOT_SET)
+        assert not defined(UNDEFINED)
 
     @pytest.mark.parametrize('value', (None, 0, '', [], (), set()))
     def test_defined(self, value):

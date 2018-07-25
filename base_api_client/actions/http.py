@@ -2,7 +2,7 @@ import re
 
 from six import add_metaclass
 
-from base_api_client.constants import NOT_SET, defined
+from base_api_client.constants import UNDEFINED, defined
 from base_api_client.errors import ImplementationError
 from base_api_client.protocols.http import HttpProtocol
 from base_api_client.wrappers.http import HttpParamsWrapper, HttpResultWrapper
@@ -92,7 +92,7 @@ class HttpActionMetaclass(type):
                 defined_params.update(params)
 
         if not defined_params:
-            defined_params = NOT_SET
+            defined_params = UNDEFINED
         base_defined_params = mcs.get_value(
             'DEFINED_PARAMS', bases, class_dict
         )
@@ -117,15 +117,15 @@ class HttpAction(BaseAction):
     PARAMS_WRAPPER = HttpParamsWrapper
     RESULT_WRAPPER = HttpResultWrapper
 
-    METHOD = NOT_SET
-    URL_PATH_TEMPLATE = NOT_SET
-    URL_COMPONENTS = NOT_SET
-    USE_TRAILING_SLASH = NOT_SET
-    PAYLOAD_REQUIRED = NOT_SET
+    METHOD = UNDEFINED
+    URL_PATH_TEMPLATE = UNDEFINED
+    URL_COMPONENTS = UNDEFINED
+    USE_TRAILING_SLASH = UNDEFINED
+    PAYLOAD_REQUIRED = UNDEFINED
 
-    URL_QUERY_PARAMS = NOT_SET
-    PAYLOAD_PARAMS = NOT_SET
-    HEADERS_PARAMS = NOT_SET
+    URL_QUERY_PARAMS = UNDEFINED
+    PAYLOAD_PARAMS = UNDEFINED
+    HEADERS_PARAMS = UNDEFINED
 
     # There is no sense in overriding the following constants
     # because they will be set by the metaclass

@@ -1,4 +1,4 @@
-class NotSet(object):
+class Undefined(object):
 
     # Python 3.x
     def __bool__(self):
@@ -11,8 +11,8 @@ class NotSet(object):
         return self.__class__.__name__
 
 
-NOT_SET = NotSet()
+UNDEFINED = Undefined()
 
 
 def defined(value):
-    return value is not NOT_SET
+    return value is not UNDEFINED

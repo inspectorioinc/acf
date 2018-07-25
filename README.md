@@ -4,7 +4,7 @@ A framework containing template functionality that can be used while
 implementing specific API client libraries for any services.
 
 ## Minimal client
-Minimal API client could looks like this:
+Minimal API client could look like this:
 ```python
 from base_api_client.actions.http import HttpAction
 from base_api_client.clients.base import BaseClient

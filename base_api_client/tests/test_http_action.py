@@ -10,7 +10,7 @@ class TestHttpAction(object):
     class BaseAction(HttpAction):
         URL_COMPONENTS = ['http://example.com', 'api', 'v1']
 
-    def test_url_components(self):
+    def test_url_path_template(self):
         assert self.BaseAction.URL_PATH_TEMPLATE == 'http://example.com/api/v1'
 
     def test_trailing_slash(self):

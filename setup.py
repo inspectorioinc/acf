@@ -8,6 +8,7 @@ setup(
     description='Base API Client',
     install_requires=[
         'cached-property>=1.4,<2',
+        'six>=1.9.0',
         'requests>=2.18,<3',
     ],
     packages=find_packages(

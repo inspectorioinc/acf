@@ -48,26 +48,27 @@ class HttpActionMetaclass(type):
 
     @classmethod
     def init_url_path_template(mcs, bases, class_dict):
-        url_components = class_dict.get('URL_COMPONENTS')
-        use_trailing_slash = mcs.get_value('USE_TRAILING_SLASH',
-                                           bases, class_dict)
-        url_path_template = mcs.get_value('URL_PATH_TEMPLATE',
-                                          bases, class_dict)
+        url_components = class_dict.get('URL_COMPONENTS') or ()
+        use_trailing_slash = mcs.get_value(
+            'USE_TRAILING_SLASH', bases, class_dict
+        )
+        base_url_path_template = mcs.get_value(
+            'URL_PATH_TEMPLATE', bases, class_dict
+        )
+
+        if base_url_path_template:
+            url_components = (base_url_path_template,) + tuple(url_components)
 
         if url_components:
-            if url_path_template:
-                url_path_template = url_path_template.rstrip('/')
-                url_components = [url_path_template] + list(url_components)
-
-            url_path_template = '/'.join(url_components)
-
-            if use_trailing_slash and not url_path_template.endswith('/'):
+            url_path_template = '/'.join(
+                component.strip('/') for component in url_components
+            )
+            if use_trailing_slash:
                 url_path_template += '/'
 
-            class_dict['URL_PATH_TEMPLATE'] = url_path_template
-        elif (use_trailing_slash and url_path_template
-              and not url_path_template.endswith('/')):
-            class_dict['URL_PATH_TEMPLATE'] = url_path_template + '/'
+            # we don't need to override URL_PATH_TEMPLATE if it was not changed
+            if url_path_template != base_url_path_template:
+                class_dict['URL_PATH_TEMPLATE'] = url_path_template
 
     @classmethod
     def init_url_path_params(mcs, class_dict):
@@ -96,6 +97,8 @@ class HttpActionMetaclass(type):
         base_defined_params = mcs.get_value(
             'DEFINED_PARAMS', bases, class_dict
         )
+
+        # we don't need to override DEFINED_PARAMS if nothing was changed
         if defined_params != base_defined_params:
             class_dict['DEFINED_PARAMS'] = defined_params
 

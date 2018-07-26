@@ -2,12 +2,11 @@ import re
 
 from six import add_metaclass
 
+from base_api_client.actions.base import BaseAction
 from base_api_client.constants import UNDEFINED, defined
 from base_api_client.errors import ImplementationError
 from base_api_client.protocols.http import HttpProtocol
 from base_api_client.wrappers.http import HttpParamsWrapper, HttpResultWrapper
-
-from .base import BaseAction
 
 
 PARAM_REGEX = re.compile('{(?P<param>.*?)}')

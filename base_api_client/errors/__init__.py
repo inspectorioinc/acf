@@ -1,4 +1,4 @@
-from .base import (
+from base_api_client.errors.base import (
     BaseError,
     ImplementationError,
     UnknownActionError,

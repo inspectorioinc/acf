@@ -1,7 +1,7 @@
 class BaseResultContainer(object):
 
-    def __init__(self, parsed_result=None, raw_result=None):
-        self.result = parsed_result
+    def __init__(self, result=None, raw_result=None):
+        self.result = result
         self.raw_result = raw_result
 
 

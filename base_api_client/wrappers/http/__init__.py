@@ -123,7 +123,7 @@ class HttpResultWrapper(BaseResultWrapper):
         try:
             try:
                 is_successful = self.is_successful
-                parsed_result = self.parsed_result
+                result = self.result
             except ValueError as error:
                 if self.response_status_is_successful:
                     raise ParseResponseError(
@@ -133,11 +133,11 @@ class HttpResultWrapper(BaseResultWrapper):
                     )
                 else:
                     is_successful = False
-                    parsed_result = None
+                    result = None
 
             return self.Meta.container(
                 is_successful=is_successful,
-                parsed_result=parsed_result,
+                result=result,
                 raw_result=self.raw_result
             )
         except ParseResponseError as error:
@@ -162,8 +162,11 @@ class HttpResultWrapper(BaseResultWrapper):
     @property
     def parsed_result(self):
         if self.response.status_code != 204:
-            result = self.response.json()
-            result_key = getattr(self.action, 'RESULT_KEY', None)
-            if result_key is not None:
-                return result.get(result_key)
-            return result
+            return self.response.json()
+
+    @property
+    def result(self):
+        result_key = self.action.RESULT_KEY
+        if result_key:
+            return self.parsed_result.get(result_key)
+        return self.parsed_result

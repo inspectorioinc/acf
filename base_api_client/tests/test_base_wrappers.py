@@ -37,7 +37,7 @@ def test_base_result_container_init():
     result = 'foobar'
     raw_result = 'foobar\n'
     container = BaseResultContainer(
-        parsed_result=result,
+        result=result,
         raw_result=raw_result
     )
 

@@ -41,24 +41,21 @@ class HttpParamsWrapper(BaseParamsWrapper):
             for kwarg in self.REQUEST_KWARGS
         }
 
-    def get_data_from_raw_kwargs(self, include=UNDEFINED, exclude=UNDEFINED):
+    def filter_raw_kwargs(self, include=UNDEFINED, exclude=UNDEFINED):
+        check = None
+
         if defined(include):
+            def check(key):
+                return key in include
+        elif defined(exclude):
+            def check(key):
+                return key not in exclude
+
+        if check:
             return {
                 key: value
                 for key, value in self.raw_kwargs.items()
-                if key in include
-            }
-
-        if exclude:
-            exclude.update(self.action.DEFINED_PARAMS or ())
-        else:
-            exclude = self.action.DEFINED_PARAMS
-
-        if defined(exclude):
-            return {
-                key: value
-                for key, value in self.raw_kwargs.items()
-                if key not in exclude
+                if check(key)
             }
 
         return self.raw_kwargs
@@ -80,14 +77,26 @@ class HttpParamsWrapper(BaseParamsWrapper):
 
         url_query_params = self.action.URL_QUERY_PARAMS
         if defined(url_query_params):
-            return self.get_data_from_raw_kwargs(include=url_query_params)
+            return self.filter_raw_kwargs(include=url_query_params)
 
-        if (not self.action.PAYLOAD_REQUIRED or
-                defined(self.action.PAYLOAD_PARAMS)):
-            return self.get_data_from_raw_kwargs()
+        if self.action.PAYLOAD_REQUIRED:
+            if 'data' in self.raw_kwargs:
+                return self.filter_raw_kwargs(
+                    exclude={'data'}.union(self.action.DEFINED_PARAMS or ())
+                )
+            if defined(self.action.PAYLOAD_PARAMS):
+                return self.filter_raw_kwargs(
+                    exclude=self.action.DEFINED_PARAMS
+                )
 
-        if 'data' in self.raw_kwargs:
-            return self.get_data_from_raw_kwargs(exclude={'data'})
+            # We should not return query string params if payload is
+            # required but the 'data' is not in kwargs and
+            # URL_QUERY_PARAMS and PAYLOAD_PARAMS were not defined,
+            # because all the kwargs that are not in DEFINED_PARAMS
+            # will be used to build the payload by default.
+
+        else:
+            return self.filter_raw_kwargs(exclude=self.action.DEFINED_PARAMS)
 
     def build_json(self):
         """Returns the payload if it's required"""
@@ -95,8 +104,9 @@ class HttpParamsWrapper(BaseParamsWrapper):
         if self.action.PAYLOAD_REQUIRED:
             if 'data' in self.raw_kwargs:
                 return self.raw_kwargs['data']
-            return self.get_data_from_raw_kwargs(
-                include=self.action.PAYLOAD_PARAMS
+            return self.filter_raw_kwargs(
+                include=self.action.PAYLOAD_PARAMS,
+                exclude=self.action.DEFINED_PARAMS
             )
 
     def build_headers(self):
@@ -107,7 +117,7 @@ class HttpParamsWrapper(BaseParamsWrapper):
 
         headers_params = self.action.HEADERS_PARAMS
         if defined(headers_params):
-            return self.get_data_from_raw_kwargs(include=headers_params)
+            return self.filter_raw_kwargs(include=headers_params)
 
     def build_empty(self):
         pass

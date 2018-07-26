@@ -63,6 +63,14 @@ class TestHttpParamsWrapper(object):
         assert wrapped_kwargs['params'] == foo_bar
 
         class Action(BaseAction):
+            PAYLOAD_PARAMS = {'value'}
+            PAYLOAD_REQUIRED = True
+
+        wrapped_kwargs = self.get_wrapped_kwargs(Action, value=1, **foo_bar)
+        assert wrapped_kwargs['json'] == {'value': 1}
+        assert wrapped_kwargs['params'] == foo_bar
+
+        class Action(BaseAction):
             URL_QUERY_PARAMS = {'foo', 'bar'}
 
         faker = Faker()

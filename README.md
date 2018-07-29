@@ -33,11 +33,11 @@ class HttpbinClient(BaseClient):
 ```
 
 ## Example of the API client usage
-You could evaluate the code above or just execute
+You can evaluate the code above or just execute the following line
+to get the Httpbin client.
 ```python
 from example.httpbin_client import HttpbinClient
 ```
-to get the Httpbin client.
 After that you'll be able to try
 [sending anything](http://httpbin.org/#/Anything/post_anything)!
 

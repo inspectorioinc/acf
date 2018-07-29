@@ -21,9 +21,9 @@ PARAM_CONSTANT_NAMES = (
 class HttpActionMetaclass(type):
     """HttpActionMetaclass
 
-    This metaclass is used for updating URL_PATH_TEMPLATE constant
-    of the HttpAction child class using predefined URL_COMPONENTS
-    iterable if it's available and initializing params constants.
+    This metaclass is used for initializing *_PARAMS constants and
+    updating URL_PATH_TEMPLATE constant of the HttpAction child class
+    using predefined URL_COMPONENTS iterable if it's available.
     """
 
     def __new__(mcs, name, bases, class_dict):
@@ -48,9 +48,6 @@ class HttpActionMetaclass(type):
     @classmethod
     def init_url_path_template(mcs, bases, class_dict):
         url_components = class_dict.get('URL_COMPONENTS') or ()
-        use_trailing_slash = mcs.get_value(
-            'USE_TRAILING_SLASH', bases, class_dict
-        )
         base_url_path_template = mcs.get_value(
             'URL_PATH_TEMPLATE', bases, class_dict
         )
@@ -61,6 +58,9 @@ class HttpActionMetaclass(type):
         if url_components:
             url_path_template = '/'.join(
                 component.strip('/') for component in url_components
+            )
+            use_trailing_slash = mcs.get_value(
+                'USE_TRAILING_SLASH', bases, class_dict
             )
             if use_trailing_slash:
                 url_path_template += '/'

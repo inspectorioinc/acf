@@ -5,7 +5,7 @@ from base_api_client.constants import UNDEFINED, defined
 
 class TestConstants(object):
 
-    def test_not_set(self):
+    def test_undefined(self):
         assert bool(UNDEFINED) is False
         assert str(UNDEFINED) == 'Undefined'
 

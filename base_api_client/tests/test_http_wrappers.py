@@ -79,7 +79,7 @@ class TestHttpParamsWrapper(object):
         kwargs.pop('bar', None)
         wrapped_kwargs = self.get_wrapped_kwargs(Action, **kwargs)
 
-        # 'bar' is not presented and it's ok
+        # 'bar' is not present and it's ok
         assert wrapped_kwargs['params'] == expected_params
 
     def test_build_headers(self):

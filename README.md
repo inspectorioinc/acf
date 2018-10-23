@@ -1,14 +1,15 @@
-# Inspectorio base API client
+# API Client Framework
 
-A framework containing template functionality that can be used while
-implementing specific API client libraries for any services.
+The framework for building well structured API client libraries in Python.
 
-## Minimal client
-Minimal API client could look like this:
+## Minimal API client implementation
+
+The simplest implementation of the API client based on ACF could look like this:
+
 ```python
-from base_api_client.actions.http import HttpAction
-from base_api_client.clients.base import BaseClient
-from base_api_client.resources.base import BaseResource
+from acf.actions.http import HttpAction
+from acf.clients.base import BaseClient
+from acf.resources.base import BaseResource
 
 
 class SendAnythingAction(HttpAction):
@@ -32,14 +33,15 @@ class HttpbinClient(BaseClient):
     }
 ```
 
-## Example of the API client usage
-You can evaluate the code above or just execute the following line
-to get the Httpbin client.
+## Example of the minimal API client usage
+
+You can evaluate the code above or just execute the following line for importing the Httpbin client.
+
 ```python
 from example.httpbin_client import HttpbinClient
 ```
-After that you'll be able to try
-[sending anything](http://httpbin.org/#/Anything/post_anything)!
+
+After that you'll be able to [send any test data](http://httpbin.org/#/Anything/post_anything)!
 
 ```python
 >>> client = HttpbinClient()

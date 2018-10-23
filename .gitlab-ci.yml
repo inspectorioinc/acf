@@ -1,10 +1,9 @@
-image: "inspectorio/python:2.7"
+image: "python:3"
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
   paths:
     - cache/pip
-    - cache/pipenv
 
 stages:
   - test
@@ -14,14 +13,12 @@ test:
   script:
     - pip install -r requirements.txt
     - flake8
-    - pytest --cov=base_api_client --junitxml=test_result.xml
+    - pytest --cov=acf --junitxml=test_result.xml
     - coverage xml -i
 
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   only:
     - master
-    - demo
-    - dev
     - /^v\d+\.\d+\.\d+$/
     - /^v\d+\.\d+\.\d+-rc\.\d+$/
     - /^v\d+\.\d+\.\d+-alpha\.\d+$/
@@ -29,21 +26,3 @@ test:
     - /^feature\/.*$/
     - /^fix\/.*$/
     - /^chore\/.*$/
-
-.devops: &devops |
-  # Inspectorio GitLab pipeline shared libs
-  [[ "$TRACE" ]] && set -x
-  which curl || ( apt-get update -qq -y && apt-get install -qq -y curl ) || ( apk add --no-cache curl )
-  # only bash support 'process substitution'
-  # docker dind is alpine based. Use workaround instead
-  # source <(curl -s -XGET -H "PRIVATE-TOKEN: ${PIPELINE_AUTH}" "${PIPELINE_SHARED_SCRIPT}")
-  curl -s -XGET -H "PRIVATE-TOKEN: ${PIPELINE_AUTH}" "${PIPELINE_SHARED_SCRIPT}" -o pipeline.sh
-  source ./pipeline.sh
-
-before_script:
-  - *devops
-  - ssh_agent
-
-after_script:
-  - *devops
-  - cleanup

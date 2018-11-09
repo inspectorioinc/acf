@@ -41,7 +41,7 @@ class HttpActionMetaclass(type):
         if key in class_dict:
             return class_dict[key]
 
-        for base_class in bases:
+        for base_class in bases:  # pragma: no branch
             if hasattr(base_class, key):
                 return getattr(base_class, key)
 

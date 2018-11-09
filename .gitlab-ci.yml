@@ -1,5 +1,3 @@
-image: "python:3"
-
 cache:
   key: "$CI_COMMIT_REF_SLUG"
   paths:
@@ -8,13 +6,12 @@ cache:
 stages:
   - test
 
-test:
+.test:
   stage: test
   script:
     - pip install -r requirements.txt
     - flake8
-    - pytest --cov=acf --junitxml=test_result.xml
-    - coverage xml -i
+    - pytest
 
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   only:
@@ -26,3 +23,23 @@ test:
     - /^feature\/.*$/
     - /^fix\/.*$/
     - /^chore\/.*$/
+
+test-2.7:
+  extends: .test
+  image: 'python:2.7'
+
+test-3.4:
+  extends: .test
+  image: 'python:3.4'
+
+test-3.5:
+  extends: .test
+  image: 'python:3.5'
+
+test-3.6:
+  extends: .test
+  image: 'python:3.6'
+
+test-3.7:
+  extends: .test
+  image: 'python:3.7'

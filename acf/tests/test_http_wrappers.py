@@ -109,6 +109,11 @@ class TestHttpResultWrapper(object):
         assert result.is_successful
         assert result.result == expected_result
 
+        requests_mock.get(url, status_code=204)
+        result = action()
+        assert result.is_successful
+        assert result.result is None
+
         requests_mock.get(url, status_code=500, text='Server error')
         result = action()
         assert not result.is_successful

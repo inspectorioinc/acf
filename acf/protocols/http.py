@@ -1,4 +1,5 @@
 import requests
+import six
 
 from acf.errors.http import RequestError
 from acf.protocols.base import BaseProtocol
@@ -17,6 +18,6 @@ class HttpProtocol(BaseProtocol):
 
     def _handle_error(self, error, **kwargs):
         raise RequestError(
-            message=str(getattr(error, 'message', None) or error),
+            message=six.text_type(error),
             base_error=error
         )

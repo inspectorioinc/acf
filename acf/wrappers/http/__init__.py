@@ -1,3 +1,4 @@
+import six
 from cached_property import cached_property
 
 from acf.constants import defined, UNDEFINED
@@ -24,7 +25,7 @@ class HttpParamsWrapper(BaseParamsWrapper):
             raise error
         except Exception as error:
             raise ParamsError(
-                message=getattr(error, 'message', None) or str(error),
+                message=six.text_type(error),
                 base_error=error
             )
 
@@ -150,7 +151,7 @@ class HttpResultWrapper(BaseResultWrapper):
             raise error
         except Exception as error:
             raise ResultError(
-                message=getattr(error, 'message', None) or str(error),
+                message=six.text_type(error),
                 base_error=error,
                 response=self.response
             )

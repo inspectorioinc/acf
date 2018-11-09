@@ -1,0 +1,4 @@
+- Aliaksei Urbanski: [GitHub](https://github.com/Jamim), [GitLab](https://gitlab.com/aliaksei.urbanski)
+- Katherine Surta: [GitHub](https://github.com/PoppyBagel)
+- Nikolay Saskovets: [GitHub](https://github.com/nikolay-saskovets), [GitLab](https://gitlab.com/nikolay-saskovets)
+- Yuriy Sahalovich: [GitHub](https://github.com/yuri-sagalovich), [GitLab](https://gitlab.com/yuri-sagalovich)

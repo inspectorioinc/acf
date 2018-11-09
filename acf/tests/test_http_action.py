@@ -63,6 +63,12 @@ class TestHttpAction(object):
             URL_PATH_TEMPLATE = BaseAction.URL_PATH_TEMPLATE + '/status/'
             URL_COMPONENTS = EntityAction.URL_COMPONENTS
 
+        class UrlMixin(object):
+            URL_PATH_TEMPLATE = 'http://example_com/{some_id}'
+
+        class MixedAction(UrlMixin, EntityAction):
+            pass
+
         assert EntityAction.URL_PATH_TEMPLATE == 'http://example.com/api/v1/' \
                                                  'entity/{entity_id}'
         assert EntityAction.URL_PATH_PARAMS == {'entity_id'}
@@ -70,6 +76,8 @@ class TestHttpAction(object):
         assert StatusAction.URL_PATH_TEMPLATE == 'http://example.com/api/v1/' \
                                                  'status/entity/{entity_id}'
         assert StatusAction.URL_PATH_PARAMS == {'entity_id'}
+
+        assert MixedAction.URL_PATH_PARAMS == {'some_id'}
 
         with pytest.raises(ImplementationError):
             class BrokenAction(HttpAction):

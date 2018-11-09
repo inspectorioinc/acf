@@ -28,7 +28,7 @@ class HttpActionMetaclass(type):
 
     def __new__(mcs, name, bases, class_dict):
         mcs.init_url_path_template(bases, class_dict)
-        mcs.init_url_path_params(class_dict)
+        mcs.init_url_path_params(bases, class_dict)
         mcs.init_defined_params(bases, class_dict)
         mcs.init_payload_required(bases, class_dict)
 
@@ -70,11 +70,13 @@ class HttpActionMetaclass(type):
                 class_dict['URL_PATH_TEMPLATE'] = url_path_template
 
     @classmethod
-    def init_url_path_params(mcs, class_dict):
-        url_path_template = class_dict.get('URL_PATH_TEMPLATE')
+    def init_url_path_params(mcs, bases, class_dict):
+        url_path_template = mcs.get_value(
+            'URL_PATH_TEMPLATE', bases, class_dict
+        )
 
         if url_path_template:
-            class_dict['URL_PATH_PARAMS'] = params = set()
+            params = set()
             for match in PARAM_REGEX.finditer(url_path_template):
                 param = match.group('param')
                 if not param:
@@ -82,6 +84,9 @@ class HttpActionMetaclass(type):
                         'Unnamed params are not supported'
                     )
                 params.add(param)
+
+            if mcs.get_value('URL_PATH_PARAMS', bases, class_dict) != params:
+                class_dict['URL_PATH_PARAMS'] = params
 
     @classmethod
     def init_defined_params(mcs, bases, class_dict):

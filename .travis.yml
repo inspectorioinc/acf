@@ -11,7 +11,11 @@ matrix:
     - python: '3.5'
     - python: '3.6'
     - python: '3.7'
+      env: COVER=1
 
 script:
   - flake8
   - pytest
+
+after_success:
+  - if [ "$COVER" = "1" ]; then pip install codecov && codecov; fi

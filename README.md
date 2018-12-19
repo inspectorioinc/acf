@@ -38,7 +38,7 @@ class HttpbinClient(BaseClient):
 You can evaluate the code above or just execute the following line for importing the Httpbin client.
 
 ```python
-from example.httpbin_client import HttpbinClient
+from acf_example.httpbin_client import HttpbinClient
 ```
 
 After that you'll be able to [send any test data](http://httpbin.org/#/Anything/post_anything)!
